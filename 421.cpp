@@ -12,7 +12,7 @@ public:
         root = new TrieNode();
         for(auto num:nums){
             TrieNode* p = root;
-            for(int i=31;i>=0;--i){
+            for(int i=30;i>=0;--i){
                 int bit = (num >> i) & 1;
                 if(!p->child[bit]) p->child[bit] = new TrieNode();
                 p = p->child[bit];
@@ -22,7 +22,7 @@ public:
         for(auto num: nums){
             TrieNode* p = root;
             int cur=0;
-            for(int i=31;i>=0;--i){
+            for(int i=30;i>=0;--i){
                 int bit = (num >> i) & 1;
                 if(!p->child[1-bit]) p = p->child[bit];
                 else{
