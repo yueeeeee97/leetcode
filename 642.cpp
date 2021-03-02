@@ -1,3 +1,76 @@
+//each node will maintain a map 
+//stores all strings starting with this prefix and its frequency
+class AutocompleteSystem {
+public:
+    class TrieNode{
+    public:
+        TrieNode* child[27];
+        unordered_map<string,int> pre;
+        TrieNode(){
+            for(auto &c: child) c = NULL;
+        }
+    };
+    void insert(string s, int freq){
+        TrieNode* p = root;
+        for(char c: s){
+            int idx = (c==' ')? 26: c-'a';
+            if(!p->child[idx]){
+                p->child[idx] = new TrieNode();
+            } 
+            p->child[idx]->pre[s]+=freq;
+            p = p->child[idx];
+        }
+    }
+    struct cmp{
+        bool operator()(const pair<string,int>& a,const pair<string,int>&b){
+            if(a.second == b.second){
+                return a.first>b.first;
+            }
+            return a.second<b.second;
+        }  
+    };
+    vector<string> search(string s){
+        vector<string> res;
+       
+        TrieNode* p = root;
+        for(char c: s){
+            int idx = (c==' ')? 26: c-'a';
+            if(!p->child[idx]) return{};
+            p = p->child[idx];
+        }
+        
+        priority_queue<pair<string,int>,vector<pair<string,int>>,cmp> pq;
+        for(auto t : p->pre){
+            pq.push(make_pair(t.first,t.second));
+        }
+        for(int i=0;i<3;++i){
+            if(pq.empty()) break;
+            auto t = pq.top();pq.pop();
+            res.push_back(t.first);
+        }
+        return res;
+    }
+    AutocompleteSystem(vector<string>& sentences, vector<int>& times) {
+        root = new TrieNode();
+        for(int i=0;i<sentences.size();++i){
+            insert(sentences[i],times[i]);
+        }
+    }
+    
+    vector<string> input(char c) {
+        if(c=='#'){
+            insert(prefix,1);
+            prefix = "";
+            return {};
+        }
+        prefix += c;
+        return search(prefix);      
+    }
+private:
+    TrieNode* root;
+    string prefix = "";
+
+};
 // DFS + Trie
 class AutocompleteSystem {
 public:
