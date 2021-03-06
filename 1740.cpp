@@ -11,7 +11,7 @@ public:
         int right = helper(root->right,p,q,depth+1);
         
         if(root->val == p||root->val == q) return abs(max(left,right)-depth);
-        if(left&&right) return left+right;
+        if(left&&right) return left+right-2*depth;
         else return max(left,right);
     }
 };
