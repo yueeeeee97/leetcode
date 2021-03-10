@@ -30,6 +30,24 @@ public:
     }
 };
 
+//map
+class Solution {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
+        map<int,int> m;
+        for(auto interval:intervals){
+            ++m[interval[0]];
+            --m[interval[1]];
+        }
+        int res = 0, cnt = 0;
+        for(auto iter:m){
+            cnt += iter.second;
+            res = max(res, cnt);   
+        }
+        return res;
+    }
+};
+
 //priority_queue
 //先把所有的时间区间按照起始时间排序，然后新建一个最小堆，开始遍历时间区间，
 //如果堆不为空，且首元素小于等于当前区间的起始时间，去掉堆中的首元素，把当前区间的结束时间压入堆，
